@@ -9,6 +9,9 @@ var server = http.createServer(function(req,res){
     // Get the Path from the URL
     var path = parsedUrl.pathname;
 
+    // Get the Query String
+    var queryString = parsedUrl.query;
+
     // Trim it to Some extent
     var trimmedPath = path.replace('/','');
 
@@ -18,8 +21,8 @@ var server = http.createServer(function(req,res){
     // End the Process by showing some message 
     res.end("Welcome to My API testing!");
 
-    // Clog out the Trimmed Path and it's Method along with 
-    console.log("Request Recieved on "+trimmedPath+" with method "+method);
+    // Clog out the Trimmed Path, Method and Query String
+    console.log("Request Recieved on "+trimmedPath+" with method "+method+" with the queries: ",queryString);
 });
 
 
