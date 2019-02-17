@@ -18,11 +18,15 @@ var server = http.createServer(function(req,res){
     // Get the Method of Request from the URL and store it's Lower Cased Version into a 'method' object
     var method = req.method.toLowerCase();
 
+    // Get the Headers
+    var headers = req.headers;
+
     // End the Process by showing some message 
     res.end("Welcome to My API testing!");
 
-    // Clog out the Trimmed Path, Method and Query String
+    // Clog out the Trimmed Path, Method, Query String and headers
     console.log("Request Recieved on "+trimmedPath+" with method "+method+" with the queries: ",queryString);
+    console.log("The Headers are: ",headers);
 });
 
 
