@@ -30,7 +30,19 @@ var server = http.createServer(function(req,res){
 
     req.on('end',function(){
         buffer += decoder.end();
+
+        // Choose the Handler which this request should go to. If none is listed, route the request to 404 notFound handler
+        var chosenHandler = typeof(router[trimmedPath]) !== 'undefined' ? router[trimmedPath] : handlers.notFound;
         
+        // Construct the data object to send to the Handler
+        var data = {
+            'trimmedPath': trimmedPath,
+            'queryString': queryString,
+            'method': method,
+            'headers': headers,
+            'payload': buffer
+        };  
+
         // End the Process by showing some message 
         res.end("Welcome to My API testing!");
         
@@ -44,3 +56,21 @@ var server = http.createServer(function(req,res){
 server.listen(3000,function(){
     console.log("Server listening on Port: 3000");
 });
+
+// Handler Empty Object
+var handlers = {};
+
+// handler.sample function calls back a 406 request and sends the data.
+handlers.sample = function(data,callback){
+    callback(406, {'name': 'sample buffer'});
+};
+
+// handler.notFound function calls back a 404
+handlers.notFound = function(data, callback){
+    callback(404);
+};
+
+// Router object Combines 'route keys' with their Corresponding Handler Functions
+var router = {
+    'sample': handlers.sample,
+};
