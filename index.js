@@ -43,13 +43,28 @@ var server = http.createServer(function(req,res){
             'payload': buffer
         };  
 
-        // End the Process by showing some message 
-        res.end("Welcome to My API testing!");
-        
+        chosenHandler(data, function(statusCode, payload){
+            // If statusCode is a Number, let it be the same, else change it to code 200
+            statusCode = typeof(statusCode) == 'number' ? statusCode : 200;
+
+            // If Payload is an Object, let it be the same, else change it to an empty object
+            payload = typeof(payload) == 'object' ? payload : {};
+
+            // Stringify the Payload into a String for User to see
+            var payloadString = JSON.stringify(payload);
+
+            // End this by showing payloadString and statusCode
+            res.writeHead(statusCode);
+            res.end(payloadString);
+
+            // Log the Request Path and payloadString
+            console.log("Response is: ",statusCode,payloadString);
+        });
+ 
         // Clog out the Trimmed Path, Method, Query String, Header and Payload
-        console.log("Request Recieved on "+trimmedPath+" with method "+method+" with the queries: ",queryString);
-        console.log("The Headers are: ",headers);
-        console.log("The Payload is: ",buffer);
+        // console.log("Request Recieved on "+trimmedPath+" with method "+method+" with the queries: ",queryString);
+        // console.log("The Headers are: ",headers);
+        // console.log("The Payload is: ",buffer);
     });
 });
 
