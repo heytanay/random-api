@@ -1,94 +1,85 @@
 const http = require("http");
 const url = require("url");
 const StringDecoder = require("string_decoder").StringDecoder;
-const config = require("./config");
+const config = require('./configuration/config');
 
 var server = http.createServer(function(req,res){
-    // Get the URL
-    var parsedUrl = url.parse(req.url, true);
 
-    // Get the Path from the URL
-    var path = parsedUrl.pathname;
+	// Get the Method of the request
+	var method = req.method.toLowerCase();
 
-    // Get the Query String
-    var queryString = parsedUrl.query;
+	// Parse the Url and get it's path
+	var parsedUrl = url.parse(req.url, true);
+	var path= parsedUrl.pathname;
 
-    // Trim the Path Variable
-    var trimmedPath = path.replace(/^\/+|\/+$/g,'');
+	// Trim the Path
+	var trimmedPath = path.replace(/^\/+|\/+$/g,'');
 
-    // Get the Method of Request from the URL and store it's Lower Cased Version into a 'method' object
-    var method = req.method.toLowerCase();
+	// Get the query String
+	var queryString = parsedUrl.query;
 
-    // Get the Headers
-    var headers = req.headers;
+	// Get the Headers from the request object
+	var headers = req.headers;
 
-    // Get Payload (No Problem if it doesn't exist)
-    var decoder = new StringDecoder('utf-8');
-    var buffer = '';
-    req.on('data',function(data){
-        buffer += decoder.write(data);
-    });
+	// Store the incoming data into 'buffer' variable
+	var buffer = '';
+	var decoder = new StringDecoder('utf-8');
+	req.on('data',function(data){
+		buffer += decoder.write(data);
+	});
 
-    req.on('end',function(){
-        buffer += decoder.end();
+	// When the Request ends => clog recieved information and res-end the status code
+	req.on('end',function(){
+		buffer += decoder.end();
 
-        // Choose the Handler which this request should go to. If none is listed, route the request to 404 notFound handler
-        var chosenHandler = typeof(router[trimmedPath]) !== 'undefined' ? router[trimmedPath] : handlers.notFound;
-        
-        // Construct the data object to send to the Handler
-        var data = {
-            'trimmedPath': trimmedPath,
-            'queryString': queryString,
-            'method': method,
-            'headers': headers,
-            'payload': buffer
-        };  
+		// Choose the Handler where this request should go to, if none, go to 404 notFound Handler
+		var chosenHandler = typeof(router[trimmedPath]) !== 'undefined' ? router[trimmedPath] : handlers.notFound;
 
-        chosenHandler(data, function(statusCode, payload){
-            // If statusCode is a Number, let it be the same, else change it to code 200
-            statusCode = typeof(statusCode) == 'number' ? statusCode : 200;
+		// Construct the data object
+		var data = {
+			'path': trimmedPath,
+			'method': method,
+			'query': queryString,
+			'headers': headers,
+			'payload': buffer,
+		};
 
-            // If Payload is an Object, let it be the same, else change it to an empty object
-            payload = typeof(payload) == 'object' ? payload : {};
+		chosenHandler(data,function(statusCode,payload){
+			statusCode = typeof(statusCode) == 'number' ? statusCode : 200;
+			
+			payload = typeof(payload) == 'object' ? payload : {};
 
-            // Stringify the Payload into a String for User to see
-            var payloadString = JSON.stringify(payload);
+			var payloadString = JSON.stringify(payload);
 
-            // End this by showing payloadString and statusCode
-            res.setHeader('Content-Type','application/json');
-            res.writeHead(statusCode);
-            res.end(payloadString);
+			res.setHeader('Content-Type','application/json');
+			res.writeHead(statusCode);
+			res.end(payloadString);
 
-            // Log the Request Path and payloadString
-            console.log("Response is: ",statusCode,payloadString);
-        });
- 
-        // Clog out the Trimmed Path, Method, Query String, Header and Payload
-        // console.log("Request Recieved on "+trimmedPath+" with method "+method+" with the queries: ",queryString);
-        // console.log("The Headers are: ",headers);
-        // console.log("The Payload is: ",buffer);
-    });
+			console.log("Got this Response: ",statusCode,payload);
+		});
+	});
 });
 
-// Get the Port and Enviorment type from config file
+
 server.listen(config.port,function(){
-    console.log("Server listening on Port:"+config.port+" in "+config.envName+" enviorment");
+	console.log("Server listening on Port: "+config.port+" under "+config.envName+" enviorment...");
 });
 
-// Handler Empty Object
 var handlers = {};
 
-// handler.sample function calls back a 406 request and sends the data.
-handlers.sample = function(data,callback){
-    callback(406, {'name': 'sample buffer'});
+handlers.home = function(data,callback){
+	callback(200,{'message':'Welcome Home!'});
 };
 
-// handler.notFound function calls back a 404
-handlers.notFound = function(data, callback){
-    callback(404);
+handlers.isAlive = function(data,callback){
+	callback(200);
 };
 
-// Router object Combines 'route keys' with their Corresponding Handler Functions
+handlers.notFound = function(data,callback){
+	callback(404);
+};
+
 var router = {
-    'sample': handlers.sample,
+	'home': handlers.home,
+	'isAlive': handlers.isAlive,
 };
