@@ -3,6 +3,10 @@ const url = require("url");
 const StringDecoder = require("string_decoder").StringDecoder;
 const config = require('./configuration/config');
 
+// Only for testing the 'lib' library
+const _data = require("./lib/data");
+
+
 var server = http.createServer(function(req,res){
 
 	// Get the Method of the request
@@ -43,18 +47,27 @@ var server = http.createServer(function(req,res){
 			'headers': headers,
 			'payload': buffer,
 		};
+		
+		// The Below function is basically used for the respective route (function) that is requested by the user.
+		// Here the, 'function(statusCode,payload)' is passed as the callback function defined in the 'handler.*route*' property.
 
 		chosenHandler(data,function(statusCode,payload){
+			// Check the Status Code, if none => statusCode = 200
 			statusCode = typeof(statusCode) == 'number' ? statusCode : 200;
 			
+			// Check the payload object, if none => pass an empty object
 			payload = typeof(payload) == 'object' ? payload : {};
 
+			// Stringify the Payload object JSON file
 			var payloadString = JSON.stringify(payload);
+
+			// Set the Header, Status Code (writeHead function) and display the stringified payload string (statusCode to be passed from the callback)
 
 			res.setHeader('Content-Type','application/json');
 			res.writeHead(statusCode);
 			res.end(payloadString);
 
+			// Logout the Status Code and the Payload from above.
 			console.log("Got this Response: ",statusCode,payload);
 		});
 	});
