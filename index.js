@@ -1,7 +1,14 @@
+/* 
+*	Main File for the API (server file)
+*/
+
+// Dependencies
 const http = require("http");
 const url = require("url");
 const StringDecoder = require("string_decoder").StringDecoder;
 const config = require('./configuration/config');
+const handlers = require("./lib/handlers");
+const helpers = require("./lib/helpers");
 
 // Only for testing the 'lib' library
 const _data = require("./lib/data");
@@ -45,7 +52,7 @@ var server = http.createServer(function(req,res){
 			'method': method,
 			'query': queryString,
 			'headers': headers,
-			'payload': buffer,
+			'payload': helpers.parseJSONToObject(buffer),
 		};
 		
 		// The Below function is basically used for the respective route (function) that is requested by the user.
@@ -74,25 +81,12 @@ var server = http.createServer(function(req,res){
 });
 
 
-server.listen(config.port,function(){
-	console.log("Server listening on Port: "+config.port+" under "+config.envName+" enviorment...");
+server.listen(config.httpPort,function(){
+	console.log("Server listening on Port: "+config.httpPort+" under "+config.envName+" enviorment...");
 });
-
-var handlers = {};
-
-handlers.home = function(data,callback){
-	callback(200,{'message':'Welcome Home!'});
-};
-
-handlers.isAlive = function(data,callback){
-	callback(200);
-};
-
-handlers.notFound = function(data,callback){
-	callback(404);
-};
 
 var router = {
 	'home': handlers.home,
 	'isAlive': handlers.isAlive,
+	'users': handlers.users,
 };

@@ -3,18 +3,24 @@
 var enviorments = {};
 
 enviorments.staging = {
-    'port': 3000,
+    'httpPort': 3000,
+    'httpsPort': 3001,
     'envName': 'Staging',
+    'hashingSecret': 'CharriotOfFire',
 };
 
 enviorments.production = {
-    'port': 5000,
+    'httpPort': 5000,
+    'httpsPort': 5001,
     'envName': 'Production',
+    'hashingSecret': 'CharriotOfFire',
 };
 
 enviorments.development = {
-    'port': 8998,
+    'httpPort': 8998,
+    'httpsPort': 8999,
     'envName':'Development',
+    'hashingSecret': 'CharriotOfFire',
 };
 
 // Check if the enviorment provided is a  valid string or not
