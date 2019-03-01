@@ -89,4 +89,5 @@ var router = {
 	'home': handlers.home,
 	'isAlive': handlers.isAlive,
 	'users': handlers.users,
+	'tokens': handlers.tokens
 };
