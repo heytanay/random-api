@@ -1,4 +1,4 @@
-/* 
+/*
 *	Main File for the API (server file)
 */
 
@@ -54,14 +54,14 @@ var server = http.createServer(function(req,res){
 			'headers': headers,
 			'payload': helpers.parseJSONToObject(buffer),
 		};
-		
+
 		// The Below function is basically used for the respective route (function) that is requested by the user.
 		// Here the, 'function(statusCode,payload)' is passed as the callback function defined in the 'handler.*route*' property.
 
 		chosenHandler(data,function(statusCode,payload){
 			// Check the Status Code, if none => statusCode = 200
 			statusCode = typeof(statusCode) == 'number' ? statusCode : 200;
-			
+
 			// Check the payload object, if none => pass an empty object
 			payload = typeof(payload) == 'object' ? payload : {};
 
@@ -89,5 +89,6 @@ var router = {
 	'home': handlers.home,
 	'isAlive': handlers.isAlive,
 	'users': handlers.users,
-	'tokens': handlers.tokens
+	'tokens': handlers.tokens,
+	'checks': handlers.checks
 };
