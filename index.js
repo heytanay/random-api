@@ -1,18 +1,21 @@
 /*
 *	Main File for the API (server file)
+*	Important: This version of Status API is 'modifies' specifically for deployment on 
 */
 
 // Dependencies
 const http = require("http");
 const url = require("url");
 const StringDecoder = require("string_decoder").StringDecoder;
-const config = require('./configuration/config');
+const cfenv = require("cfenv");
+const config = require("./configuration/config");
 const handlers = require("./lib/handlers");
 const helpers = require("./lib/helpers");
 
-// Only for testing the 'lib' library
-const _data = require("./lib/data");
-
+// For Deployment on IBM Cloud
+var appEnv = cfenv.getAppEnv();
+var hostName = appEnv.host;
+var port = appEnv.port;
 
 var server = http.createServer(function(req,res){
 
@@ -81,8 +84,8 @@ var server = http.createServer(function(req,res){
 });
 
 
-server.listen(config.httpPort,function(){
-	console.log("Server listening on Port: "+config.httpPort+" under "+config.envName+" enviorment...");
+server.listen(port,hostName,function(){
+	console.log(`Server is active on ${host}:${port}`);
 });
 
 var router = {
