@@ -7,15 +7,9 @@
 const http = require("http");
 const url = require("url");
 const StringDecoder = require("string_decoder").StringDecoder;
-const cfenv = require("cfenv");
 const config = require("./configuration/config");
 const handlers = require("./lib/handlers");
 const helpers = require("./lib/helpers");
-
-// For Deployment on IBM Cloud
-var appEnv = cfenv.getAppEnv();
-var hostName = appEnv.host;
-var port = appEnv.port;
 
 var server = http.createServer(function(req,res){
 
@@ -84,8 +78,8 @@ var server = http.createServer(function(req,res){
 });
 
 
-server.listen(port,hostName,function(){
-	console.log(`Server is active on ${host}:${port}`);
+server.listen(config.httpPort,function(){
+	console.log(`Server is active on localhost:${config.httpPort}`);
 });
 
 var router = {
