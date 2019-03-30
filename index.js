@@ -1,6 +1,5 @@
 /*
 *	Main File for the API (server file)
-*	Important: This version of Status API is 'modifies' specifically for deployment on 
 */
 
 // Dependencies
