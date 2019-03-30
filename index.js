@@ -9,10 +9,7 @@ const StringDecoder = require("string_decoder").StringDecoder;
 const config = require('./configuration/config');
 const handlers = require("./lib/handlers");
 const helpers = require("./lib/helpers");
-
-// Only for testing the 'lib' library
-const _data = require("./lib/data");
-
+const cfenv = require("cfenv");
 
 var server = http.createServer(function(req,res){
 
