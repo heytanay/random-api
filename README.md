@@ -2,7 +2,8 @@
 
 Build along-side the NodeJS-Masterclass (pirple.com) Course, this API is being Built right from Scratch. No External Libraries involved.
 
+Note: API is still under development
 
-# Note for Developers: If you are doing a PR, please do all changes in the 'staging' branch not on the master one.
+Also a Note: This Branch (release) is, as the name suggests; is meant for production and as a result, it will be the next branch to recieve updates after "master". Also, this branch will see most of its's Javascript Code in latest coding style (ES6 Currently).
 
-# API is still under development and will be completed soon!
+Please do a Pull Request if you wish to Contribute!
