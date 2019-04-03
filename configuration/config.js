@@ -7,7 +7,12 @@ enviorments.staging = {
     'httpsPort': 3001,
     'envName': 'Staging',
     'hashingSecret': 'CharriotOfFire',
-    'maxChecks': 5
+    'maxChecks': 5,
+    'twilio': {
+        'sID': '',
+        'authToken': '',
+        'fromPhone': '',
+    }
 };
 
 enviorments.production = {
@@ -15,7 +20,12 @@ enviorments.production = {
     'httpsPort': 5001,
     'envName': 'Production',
     'hashingSecret': 'CharriotOfFire',
-    'maxChecks': 5
+    'maxChecks': 5,
+    'twilio': {
+        'sID': '',
+        'authToken': '',
+        'fromPhone': '',
+    }
 };
 
 enviorments.development = {
@@ -23,7 +33,12 @@ enviorments.development = {
     'httpsPort': 8999,
     'envName':'Development',
     'hashingSecret': 'CharriotOfFire',
-    'maxChecks': 5
+    'maxChecks': 5,
+    'twilio': {
+        'sID': '',
+        'authToken': '',
+        'fromPhone': '',
+    }
 };
 
 // Check if the enviorment provided is a  valid string or not
